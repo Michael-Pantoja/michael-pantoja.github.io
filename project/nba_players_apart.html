@@ -6,7 +6,7 @@
 -->
 <html>
 	<head>
-		<title>NBA Travel Analysis</title>
+		<title>6 Degrees of NBA Players</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>	<!-- This adds tex -->
@@ -38,7 +38,7 @@
 					<header class="special container">
 						<span class="icon solid fa-project-diagram"></span>
 						<br/>
-						<h1 style = font-size:40px><strong>6 Degrees of NBA Players - A BFS Approach</strong></h1>
+						<h1 style = font-size:40px><strong>Six Degrees of NBA Players - A BFS Approach</strong></h1>
 					</header>
 
 					<!-- One -->
@@ -47,18 +47,126 @@
 							<!-- Content -->
 								<div class="content">
 									<section>
-										<header>
+
 											<h2>I. Introduction</h2>
-										</header>
-										<p>This is a fun demonstration of how Pi can be found seemingly out of nowhere. What I am about to show is a popularior
-											simulation of a Monte Carlo method. Monteo Carlo methods are general computational algorithms that rely on 
-											repeated random sampling as a way to try to extract valueable information. For this demonstration, we are going to
-											try to to get an estimation for the value of Pi using nothing but a dartboard.
+
+										<p> 
+											Think of your favorite celebrity that has been in a movie. It is almost guranteed that through a web of mutual costars, there will always be a path that leads to Kevin Bacon.
+											What's even more wild, is that you will probably find a connection that only needs 6 or less costars.
+											Don't believe me, you can try it yourself by visiting <a href = 'https://oracleofbacon.org/'>The Oracle of Bacon</a>. 
+											We'll go over the math in a bit, but I just wanted to introduce this website as a bit of a primer for what we are going to discuss, for it was this project 
+											that prompted the idea of creating a similar application, but using only NBA Players.
+										</p>
+										<p>
+											With this context, I created NBA Teams Apart (NBATA). NBATA is a simple web application in which you can select any two basketball players in professional history dating all the way 
+											back to 1947, and you will find a connection between them through shared teammates. If you want to try it yourself, you can visit <a href="http://www.nbateamsapart.com/">NBATeamsApart.com</a>.
 										</p>
 
-								</section>
-								</div>
+										<center>
+										<ul class="buttons">
+									<li><a href="http://www.nbateamsapart.com/" class="button">NBA Teams Apart</a></li>
+										</ul>
+										</center>
 
+									</section>
+									<br>
+									<section>
+
+											<h2>II. Only Six Degrees, How?</h2>
+
+										<p>
+											It seems a bit remarkable that if you pick any two players in basketball history, that you will be able to find a chain of teammates that is pretty much always going to be
+											less than 6 players. But why?
+										</p>
+										<p>
+											The answer to this is related to <a href = "https://en.wikipedia.org/wiki/Graph_theory"> Graph Theory</a>. Graph theory is a methematical branch that deals with the way objects
+											are related to each other. I'm not going to go into a ton of depth into this because it's a bit outside of the scope of this simple blog post, so instead we'll go through a 
+											quick math exercise.
+										</p>
+										<p>
+											Four years ago, there was a <a href = 'https://www.reddit.com/r/nba/comments/tc196a/guess_how_many_players_there_have_been_in_nba/'>Reddit post</a> that indicated that there have been 5,018 players that have played in the NBA. To keep numbers simple, let's say that there are now 
+											6,000 players in the league since the time this post was made. A big jump but we like round numbers over here.
+										</p>
+
+										<center>							
+										<p>
+											\( T_p = 6000 \)
+										</p>
+										</center>
+										<p>
+											I feel like for some people, seeing this number is already making the claim that we can make a connection between two basketball players, a bit more believable.
+											Let's continue. Now we're going to make the assumption that each player has 14 different teammates at a time. This is to assume that each NBA roster has 15 players.
+										</p>
+										<center>							
+										<p>
+											\( N_p = 14 \)
+										</p>
+										</center>
+										<p>	
+										<p>
+											Now, it's reasonable to assume that not every team was created only through draft picks since the inception of the team. So, to go take into account teams being 
+											traded, signed, and waived. Let's say that 7 players from each team have also been a part of a different team.
+										</p>
+										<center>							
+										<p>
+											\( N_t = 7 \)
+										</p>
+										</center>
+										<p>
+											This means that those 7 teammates that came from a different team have a connection with 14 different players. 
+											Putting the pieces together, that means that any single player on a team \( P_c \) already has a network of 91 unique players. 
+										</p>										<center>							
+										<center>							
+										<p>
+											\( P_c = (N_p * N_t) - N_t \) <br>
+											\( P_c = (14 * 7) - 7 \) <br>
+											\( P_c = 91 \)
+										</p>
+										</center>
+										<p>
+											So with just one player and one connection, we get 91. What happens if we want to expand this into two connections. Well to keep it simple, we can just square the number 
+											we calculated and get \( P_{c2} = 8,281 \). 8,281 players alraedy puts us above all NBA players in history. Of course the numbers don't explode that quickly when it comes
+											to our example. There is a bit of overlap between players and teams and I don't think I need to clarify this but not all 6,000 players were active at the same time. 
+											The point of this example was to show how quickly numbers can blow up. 
+										</p>
+										<p>
+											This example has some backing though. Facebook did an in-depth analysis to determine what the average distance between users on Facebook was and the answer was 4.7. 
+											A shockingly low number. If you want to read the entire paper, you can find it here, <a href = 'https://arxiv.org/abs/1111.4503'>The Anatomy of the Facebook Social Graph</a>
+										</p>
+									</section>
+
+									<section>
+										<h2>III. A Breadth First Search Approach</h2>
+									</section>
+
+									<p>
+										The math is great and all but how exactly do we implement an algorithm to filter through every player, every team, and every connection to ensure that not only 
+										do we get the correct answer, but we don't run a million calculations every single time. Enter Breadth-First Search (BFS).
+									</p>
+									<center>
+									<img src = 'https://media.geeksforgeeks.org/wp-content/uploads/20240216084522/bfs-vs-dfs-(1).png'></img>
+									</center>
+									<br>
+									<p>
+										BFS is an algorithm that traverses nodes in a graph by exploring every neighbor at the current level before moving on to the next. 
+										This is different from Depth-First Search (DFS), which follows a path as far as it can before backtracking.
+										While both algorithms have their place, if the goal is to find the shortest path between two nodes, BFS is typically the better choice. 
+										Because it explores all nodes at one “layer” before moving deeper, 
+										the first time you reach a node you can be confident that you’ve found the shortest path to it. 
+										With DFS, you would need to explore every possible path to guarantee the shortest one.
+									</p>
+									<p>
+										Let's use an example with NBA context.
+									</p>
+									<p>
+										Let's say we want to find the relationship between Stephen Curry and Anthony Edwards.
+									</p>
+
+
+
+
+
+								</div>
 						</section>
 
 								</div>
