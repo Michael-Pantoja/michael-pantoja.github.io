@@ -159,11 +159,182 @@
 										Let's use an example with NBA context.
 									</p>
 									<p>
-										Let's say we want to find the relationship between Stephen Curry and Anthony Edwards.
+										Let's say we want to find the relationship between Stephen Curry (Player A) and Anthony Edwards (Player B).
+									</p>
+									<p>
+										The first thing we need to do is get a list of all the teams that Steph Curry has played on in his career.
+									</p>
+									<center>
+										<div style="text-align:center;">
+											<table style="display:inline-table; width:auto; table-layout:auto; border-collapse:collapse;">
+
+											  <thead>
+												<tr>
+												  <th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:left;">Team ID</th>
+												  <th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:center;">Team Label</th>
+												  <th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:right;">Season</th>
+												</tr>
+											  </thead>
+											  <tbody>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">GSW10</td>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">Golden State Warriors</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">2009-10</td>
+												</tr>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">GSW11</td>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">Golden State Warriors</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">2010-11</td>
+												</tr>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">GSW12</td>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">Golden State Warriors</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">2011-12</td>
+													
+												  </tr>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">&hellip;</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">&hellip;</td>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">&hellip;</td>
+												</tr>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">GSW25</td>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">Golden State Warriors</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">2024-25</td>
+												</tr>
+											  </tbody>
+											</table>
+											<div style="font-size:0.95rem; margin-bottom:.4rem;">
+												<strong>Table 1.</strong> Stephen Curry Team History
+											  </div>
+										  </div>
+									  </center>	
+									  
+									  <div>
+										Now, what we can do is iterate through each team and then create a queue that has a list of all players from each team.
+									  </div>
+
+									  <center>
+										<div style="text-align:center;">
+											<table style="display:inline-table; width:auto; table-layout:auto; border-collapse:collapse;">
+
+											  <thead>
+												<tr>
+													<th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:right;">Player ID</th>
+													<th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:center;">Player Label</th>
+												  <th style="padding:.55rem 1.25rem; border-bottom:1px solid rgba(0,0,0,.55); font-weight:600; text-align:left;">Team ID</th>
+												</tr>
+											  </thead>
+											  <tbody>
+												<tr>
+													<td style="padding:.45rem 1.25rem; text-align:right;">azubuke01</td>
+													<td style="padding:.45rem 1.25rem; text-align:center;">Kelenna Azubuike</td>
+													<td style="padding:.45rem 1.25rem; text-align:left;">GSW10</td>
+												</tr>
+												<tr>
+													<td style="padding:.45rem 1.25rem; text-align:right;">bellra01</td>
+													<td style="padding:.45rem 1.25rem; text-align:center;">Raja Bell</td>
+													<td style="padding:.45rem 1.25rem; text-align:left;">GSW10</td>
+												</tr>
+												<tr>
+													<td style="padding:.45rem 1.25rem; text-align:right;">ellismo01</td>
+													<td style="padding:.45rem 1.25rem; text-align:center;">Monta Ellis</td>
+													<td style="padding:.45rem 1.25rem; text-align:left;">GSW10</td>
+												</tr>
+												<tr>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">&hellip;</td>
+												  <td style="padding:.45rem 1.25rem; text-align:center;">&hellip;</td>
+												  <td style="padding:.45rem 1.25rem; text-align:right;">&hellip;</td>
+												</tr>
+												<tr>
+													<td style="padding:.45rem 1.25rem; text-align:right;">spencpa01</td>
+													<td style="padding:.45rem 1.25rem; text-align:center;">Pat Spencer</td>
+												  <td style="padding:.45rem 1.25rem; text-align:left;">GSW25</td>
+												</tr>
+											  </tbody>
+											</table>
+											<div style="font-size:0.95rem; margin-bottom:.4rem;">
+												<strong>Table 2.</strong> Players from Steph Curry Teams
+											  </div>
+										  </div>
+									  </center>	
+
+									  <div>
+										At this point, I also want to bring up another important aspect of DSA type problems and that are sets and dictionaries.
+										As we iterate through each team and player, we are storing them in a set so we can know if we have already visited 
+										a team or a player. This makes it so that we do not commit duplicate calculations or get stuck in an infinite loop.
+									  </div>
+
+									<center>							
+										<p>
+											\[ \text{Seen}_{\text{Teams}} = \{ \text{GSW}_{10}, \text{GSW}_{11}, \text{GSW}_{12}, \ldots, \text{GSW}_{25} \} \]
+										</p>
+									</center>
+									<center>							
+										<p>
+											\[ \text{Seen}_{\text{Players}} = \{ \text{azubuke01}, \text{bellra01}, \text{ellismo01}, \ldots, \text{spencpa01} \} \]
+										</p>
+									</center>
+									<br>
+									<p>
+										I also mentioned a queue earlier. For our first iteration, our queue is going to look the same as the SeenPlayers set. 
+										That's because our queue is going to have every player from every team that Player A has played with.  
+									</p>
+									<center>							
+										<p>
+											\[ \text{queue} = \{ \text{azubuke01}, \text{bellra01}, \text{ellismo01}, \ldots, \text{spencpa01} \} \]
+										</p>
+									</center>
+									<center>							
+										<p>
+											\[ \text{res} = 1\]
+										</p>
+									</center>
+									<br>
+									<p>
+										The <code>res</code> simply represents which iteration or "step" we are on.
+										From here, because we know who Player B is, we simply iterate through all players until we get a match.
+										In this case, we are iterating through all of the names in the queue until we find Anthony Edwards (edwaran01).
+										This is where things get interesting! Because we know that Anthony Edwards and Steph Curry never played together, 
+										Anthony Edwards is not going to be in the queue. 
+										So what we do now, is we repeat that same process of iterating through each teammate that a player has had in their career,
+										with <strong>every single player in the queue</strong>. Steph Curry alone has played with 100+ different teammates.
+										Imagine how many players are going to be in our <code>SeenPlayers</code> set once we iterate through all of those players 
+										and figure out how many teammates all of those players have played with, combined. 
+										Doing an example like this shows us just how quickly these numbers can explode.
+										It also takes a bit of the magic away from it but that's okay!
+									</p>
+									<p>
+										If you're curious to see what the link between Steph Curry and Anthony Edwards is, here's what my algorithm calculated.
+									</p>
+									<center>
+										<img 
+										  src="imgs/nta_01.png"
+										  style="max-width:70%; height:auto; display:block; margin:0 auto;"
+										  alt="NBA Teams Apart visualization"
+										>
+									  </center>
+									<br>
+									<section>
+										<h2>IV. Thoughts</h2>
+									</section>
+									<p>
+										I wanted to pop by and make a few notes.
+										First of all, even though our algorithm said that the shortest bath between Curry and Ant is through the use of Donte,
+										that does not mean that it's the <i>only</i> valid path. 
+										To keep things optimized, the algorithm exits out of the iteration and returns the chain the moment it finds its first connection.
+										As mentioned, this is because BFS will always return the shortest path between two objects.
+										There is no need to keep iterating through names because we know for a fact that we alraedy have the shortest path.
+										For example, we know Kyle Anderson also played for the Timberwolves alongside Anthony Edwards and he also played on the Warriors.
+										Curry -> Anderson -> Edwards is a valid connection, but because it's the same length as the connection with Donte, it doesn't really matter.
 									</p>
 
 
-
+									<center>
+										<ul class="buttons">
+									<li><a href="../portfolio.html" class="button">Return to Portfolio</a></li>
+										</ul>
+										</center>
 
 
 								</div>
