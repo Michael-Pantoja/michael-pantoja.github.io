@@ -86,6 +86,52 @@
 										<p>
 											The next bit of data was the tricky part. 
 										</p>
+										<p>
+											I needed to find a reliable way to gather sentiments for each team after every game.
+											Naturally, my mind deviated towards Reddit.
+											During any game, you will find that each teams subreddit will have a Game Time Thread and a Post Game Thread.
+											During Live Game Threads (LGM), users will leave comments on the thread reacing to events as they happen in live time. 
+											After a game concludes, a Post Game Thread (PGT) appears.
+											It is in this PGT that users take the time to give their immediate reactions after a game.
+											While Live Game Threads tend to have thousands more comments compared to Post Game Threads, 
+											Post Game Threads are going to be more valuable for our analysis.
+											For this to work, I need to collect every single GDT from every team.
+											That way, I can write some code using the Reddit API to scrape the comments.
+											The issue is, it's not as simple as writing a script that visits every teams subreddit, finds the PGT, and then 
+											stores the URL somewhere.
+											There is no consistent way that all 32 teams present the PGTs. 
+											This is to say that for this part, I manually visited all 32 subreddits and found all 17 PGTs for each team.
+										</p>
+										<p>
+											I had to manually locate 544 Reddit threads.
+											I'm sure I could've optimized it but with how inconsistent some of the PGT titles were,
+											I figured that I would just invest the time to ensure that all 544 threads were correct.
+										</p>
+										<p>
+											Once I felt good about the URLs, we could finally start using Python to speed the process up a bit. 
+											Using the official Reddit API, I was able to write a short script that would be able to take the URLs and scrape all of the comments from each PGT.
+											This is where a bit of nuance comes in to play. 
+											To ensure that the data was "clean", I could only take the parent comments. 
+											Let me give an example as to why this is the case.
+										</p>
+										<p>
+											Let's pretend that I'm going to scrape every single comment.
+										</p>
+										<p>
+											<b>User 1:</b> This team sucks.
+										</p>
+										<p>
+											<b>User 2:</b> <i>Reply to User 1:</i> you suck.
+										</p>
+										<p>
+											With these two lines alone, you might already see the issue.
+											While User 2 has a comment with negative sentiments, those sentiments are not directed at the team.
+											Instead, they're targeted at another user.
+											Innerfandom toxicty aside, this nuance is a bit difficult for a model to distinguish.
+											To keep things simple and save a bit of time, 
+											I made the decision to only keep the parent comments. 
+											We can hopefully assume that all parent comments are directed at the team itself.
+										</p>
 
 
 								</section>
